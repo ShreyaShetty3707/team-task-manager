@@ -6,7 +6,7 @@ function closeTaskForm() {
     document.getElementById("taskModal").style.display = "none";
 }
 
-function addTask() {
+async function addTask() {
     const name = document.getElementById("taskName").value.trim();
     const description = document.getElementById("taskDescription").value.trim();
     const status = document.getElementById("taskStatus").value;
@@ -16,36 +16,40 @@ function addTask() {
         return;
     }
 
-    let statusText = "To Do";
+    try {
+        const response = await fetch("/api/tasks", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: name,
+                description: description,
+                status: status
+            })
+        });
 
-    if (status === "progress") {
-        statusText = "In Progress";
-    } else if (status === "completed") {
-        statusText = "Completed";
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.error || "Unable to add task.");
+            return;
+        }
+
+        alert("Task added successfully!");
+
+        document.getElementById("taskName").value = "";
+        document.getElementById("taskDescription").value = "";
+        document.getElementById("taskStatus").value = "todo";
+
+        closeTaskForm();
+
+        window.location.reload();
+
+    } catch (error) {
+        console.error(error);
+        alert("Could not connect to the backend.");
     }
-
-    const taskList = document.getElementById("taskList");
-
-    const task = document.createElement("div");
-    task.className = "task-card";
-
-    task.innerHTML = `
-        <div>
-            <h3>${name}</h3>
-            <p>${description || "No description provided."}</p>
-        </div>
-        <span class="status ${status}">${statusText}</span>
-    `;
-
-    taskList.appendChild(task);
-
-    document.getElementById("taskName").value = "";
-    document.getElementById("taskDescription").value = "";
-    document.getElementById("taskStatus").value = "todo";
-
-    closeTaskForm();
-
-    updateTaskCount();
 }
 
 function searchTasks() {
@@ -65,35 +69,6 @@ function searchTasks() {
     });
 }
 
-function updateTaskCount() {
-    const tasks = document.querySelectorAll(".task-card");
-
-    let todo = 0;
-    let progress = 0;
-    let completed = 0;
-
-    tasks.forEach(function(task) {
-        const status = task.querySelector(".status");
-
-        if (status.classList.contains("todo")) {
-            todo++;
-        }
-
-        if (status.classList.contains("progress")) {
-            progress++;
-        }
-
-        if (status.classList.contains("completed")) {
-            completed++;
-        }
-    });
-
-    document.getElementById("totalTasks").innerText = tasks.length;
-    document.getElementById("todoTasks").innerText = todo;
-    document.getElementById("progressTasks").innerText = progress;
-    document.getElementById("completedTasks").innerText = completed;
-}
-
 window.onclick = function(event) {
     const modal = document.getElementById("taskModal");
 
@@ -101,5 +76,3 @@ window.onclick = function(event) {
         closeTaskForm();
     }
 };
-
-updateTaskCount();
