@@ -10,6 +10,7 @@ body {
     color: #1f2937;
 }
 
+
 /* Header */
 
 header {
@@ -43,6 +44,7 @@ nav a:hover {
     color: #4f46e5;
 }
 
+
 /* Main */
 
 main {
@@ -50,6 +52,7 @@ main {
     max-width: 1200px;
     margin: 40px auto;
 }
+
 
 /* Welcome */
 
@@ -80,19 +83,28 @@ main {
     line-height: 1.6;
 }
 
+
+/* Buttons */
+
 button {
-    background: #4f46e5;
-    color: white;
     border: none;
-    padding: 13px 22px;
-    border-radius: 8px;
     cursor: pointer;
-    font-size: 15px;
+    border-radius: 8px;
+    padding: 11px 18px;
+    font-size: 14px;
 }
 
-button:hover {
+.welcome button,
+#saveButton {
+    background: #4f46e5;
+    color: white;
+}
+
+.welcome button:hover,
+#saveButton:hover {
     background: #3730a3;
 }
+
 
 /* Statistics */
 
@@ -120,7 +132,8 @@ button:hover {
     font-size: 30px;
 }
 
-/* Tasks */
+
+/* Task Section */
 
 .tasks-section {
     background: white;
@@ -152,7 +165,8 @@ button:hover {
     width: 220px;
 }
 
-/* Task cards */
+
+/* Task List */
 
 .task-list {
     display: flex;
@@ -165,8 +179,12 @@ button:hover {
     padding: 20px;
     border-radius: 10px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 15px;
+}
+
+.task-info {
+    flex: 1;
 }
 
 .task-card h3 {
@@ -178,29 +196,113 @@ button:hover {
     font-size: 14px;
 }
 
+
 /* Status */
 
-.status {
-    padding: 7px 12px;
+.status-select {
+    padding: 8px 10px;
     border-radius: 20px;
+    border: 1px solid #ddd;
     font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.status-select.todo {
+    color: #c2410c;
+    background: #fff7ed;
+}
+
+.status-select.progress {
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+.status-select.completed {
+    color: #059669;
+    background: #ecfdf5;
+}
+
+
+/* Task Actions */
+
+.task-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-btn {
+    background: #eef2ff;
+    color: #4338ca;
+}
+
+.delete-btn {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.edit-btn:hover {
+    background: #e0e7ff;
+}
+
+.delete-btn:hover {
+    background: #fecaca;
+}
+
+
+/* Empty State */
+
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: #6b7280;
+}
+
+.empty-state h3 {
+    color: #1f2937;
+    margin-bottom: 8px;
+}
+
+
+/* Team */
+
+.team-section {
+    margin-top: 30px;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.member-card {
+    border: 1px solid #e5e7eb;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.member-card p {
+    color: #6b7280;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #eef2ff;
+    color: #4f46e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-weight: bold;
 }
 
-.todo {
-    background: #fff7ed;
-    color: #c2410c;
-}
-
-.progress {
-    background: #eff6ff;
-    color: #2563eb;
-}
-
-.completed {
-    background: #ecfdf5;
-    color: #059669;
-}
 
 /* Modal */
 
@@ -211,11 +313,13 @@ button:hover {
     background: rgba(0, 0, 0, 0.5);
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 }
 
 .modal-box {
     background: white;
-    width: 400px;
+    width: 420px;
+    max-width: 90%;
     padding: 30px;
     border-radius: 15px;
     position: relative;
@@ -225,16 +329,35 @@ button:hover {
     margin-bottom: 20px;
 }
 
+.modal-box label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
 .modal-box input,
+.modal-box textarea,
 .modal-box select {
     width: 100%;
     padding: 12px;
     margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 7px;
+    outline: none;
 }
 
-.modal-box button {
+.modal-box textarea {
+    resize: vertical;
+}
+
+.modal-box input:focus,
+.modal-box textarea:focus,
+.modal-box select:focus {
+    border-color: #4f46e5;
+}
+
+#saveButton {
     width: 100%;
 }
 
@@ -244,7 +367,9 @@ button:hover {
     top: 15px;
     font-size: 25px;
     cursor: pointer;
+    color: #555;
 }
+
 
 /* Footer */
 
@@ -254,6 +379,7 @@ footer {
     color: #777;
     font-size: 13px;
 }
+
 
 /* Mobile */
 
@@ -293,5 +419,18 @@ footer {
 
     #searchTask {
         width: 100%;
+    }
+
+    .task-card {
+        flex-wrap: wrap;
+    }
+
+    .task-info {
+        width: 100%;
+        flex-basis: 100%;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr;
     }
 }

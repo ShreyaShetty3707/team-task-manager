@@ -20,7 +20,7 @@ def create_database():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             description TEXT,
-            status TEXT NOT NULL
+            status TEXT NOT NULL DEFAULT 'todo'
         )
     """)
 
@@ -31,20 +31,24 @@ def create_database():
 @app.route("/")
 def home():
     connection = get_db_connection()
+
     tasks = connection.execute(
         "SELECT * FROM tasks ORDER BY id DESC"
     ).fetchall()
+
     connection.close()
 
     return render_template("index.html", tasks=tasks)
 
 
+# Add task
 @app.route("/api/tasks", methods=["POST"])
 def add_task():
+
     data = request.get_json()
 
-    name = data.get("name")
-    description = data.get("description", "")
+    name = data.get("name", "").strip()
+    description = data.get("description", "").strip()
     status = data.get("status", "todo")
 
     if not name:
@@ -72,6 +76,99 @@ def add_task():
         "description": description,
         "status": status
     }), 201
+
+
+# Update task
+@app.route("/api/tasks/<int:task_id>", methods=["PUT"])
+def update_task(task_id):
+
+    data = request.get_json()
+
+    name = data.get("name", "").strip()
+    description = data.get("description", "").strip()
+    status = data.get("status", "todo")
+
+    if not name:
+        return jsonify({"error": "Task name is required"}), 400
+
+    connection = get_db_connection()
+
+    cursor = connection.execute(
+        """
+        UPDATE tasks
+        SET name = ?, description = ?, status = ?
+        WHERE id = ?
+        """,
+        (name, description, status, task_id)
+    )
+
+    connection.commit()
+
+    connection.close()
+
+    if cursor.rowcount == 0:
+        return jsonify({"error": "Task not found"}), 404
+
+    return jsonify({
+        "message": "Task updated successfully"
+    })
+
+
+# Delete task
+@app.route("/api/tasks/<int:task_id>", methods=["DELETE"])
+def delete_task(task_id):
+
+    connection = get_db_connection()
+
+    cursor = connection.execute(
+        "DELETE FROM tasks WHERE id = ?",
+        (task_id,)
+    )
+
+    connection.commit()
+
+    connection.close()
+
+    if cursor.rowcount == 0:
+        return jsonify({"error": "Task not found"}), 404
+
+    return jsonify({
+        "message": "Task deleted successfully"
+    })
+
+
+# Update only task status
+@app.route("/api/tasks/<int:task_id>/status", methods=["PUT"])
+def update_status(task_id):
+
+    data = request.get_json()
+
+    status = data.get("status")
+
+    if status not in ["todo", "progress", "completed"]:
+        return jsonify({"error": "Invalid status"}), 400
+
+    connection = get_db_connection()
+
+    cursor = connection.execute(
+        """
+        UPDATE tasks
+        SET status = ?
+        WHERE id = ?
+        """,
+        (status, task_id)
+    )
+
+    connection.commit()
+
+    connection.close()
+
+    if cursor.rowcount == 0:
+        return jsonify({"error": "Task not found"}), 404
+
+    return jsonify({
+        "message": "Status updated successfully"
+    })
 
 
 if __name__ == "__main__":

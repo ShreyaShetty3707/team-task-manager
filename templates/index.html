@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,323 +13,328 @@
 
 <body>
 
-    <!-- Header -->
-    <header>
+<header>
 
-        <div class="logo">
-            TeamTask
+    <div class="logo">
+        TeamTask
+    </div>
+
+    <nav>
+        <a href="/">Dashboard</a>
+        <a href="#team">Team</a>
+        <a href="#tasks">Tasks</a>
+    </nav>
+
+</header>
+
+
+<main>
+
+    <!-- Welcome -->
+    <section class="welcome">
+
+        <div>
+            <p class="small-title">TEAM WORKSPACE</p>
+
+            <h1>
+                Manage your team tasks easily.
+            </h1>
+
+            <p>
+                Create tasks, track progress and work together
+                with your team in one place.
+            </p>
         </div>
 
-        <nav>
-            <a href="/">Dashboard</a>
-            <a href="#team">Team</a>
-            <a href="#tasks">Tasks</a>
-        </nav>
+        <button onclick="openAddModal()">
+            + Add Task
+        </button>
 
-    </header>
+    </section>
 
 
-    <!-- Main Content -->
-    <main>
+    <!-- Statistics -->
+    <section class="stats">
 
-        <!-- Welcome Section -->
-        <section class="welcome">
+        <div class="stat-card">
+            <span>Total Tasks</span>
+            <h2 id="totalTasks">
+                {{ tasks|length }}
+            </h2>
+        </div>
+
+        <div class="stat-card">
+            <span>To Do</span>
+            <h2 id="todoTasks">
+                {{ tasks|selectattr("status", "equalto", "todo")|list|length }}
+            </h2>
+        </div>
+
+        <div class="stat-card">
+            <span>In Progress</span>
+            <h2 id="progressTasks">
+                {{ tasks|selectattr("status", "equalto", "progress")|list|length }}
+            </h2>
+        </div>
+
+        <div class="stat-card">
+            <span>Completed</span>
+            <h2 id="completedTasks">
+                {{ tasks|selectattr("status", "equalto", "completed")|list|length }}
+            </h2>
+        </div>
+
+    </section>
+
+
+    <!-- Tasks -->
+    <section class="tasks-section" id="tasks">
+
+        <div class="section-heading">
 
             <div>
-
-                <p class="small-title">
-                    TEAM WORKSPACE
-                </p>
-
-                <h1>
-                    Manage your team tasks easily.
-                </h1>
+                <h2>Team Tasks</h2>
 
                 <p>
-                    Create tasks, track progress and work together
-                    with your team in one place.
+                    Track what your team is working on.
                 </p>
-
             </div>
-
-            <button onclick="openTaskForm()">
-                + Add Task
-            </button>
-
-        </section>
-
-
-        <!-- Statistics -->
-        <section class="stats">
-
-            <div class="stat-card">
-                <span>Total Tasks</span>
-                <h2 id="totalTasks">
-                    {{ tasks|length }}
-                </h2>
-            </div>
-
-            <div class="stat-card">
-                <span>To Do</span>
-                <h2 id="todoTasks">
-                    {{ tasks|selectattr("status", "equalto", "todo")|list|length }}
-                </h2>
-            </div>
-
-            <div class="stat-card">
-                <span>In Progress</span>
-                <h2 id="progressTasks">
-                    {{ tasks|selectattr("status", "equalto", "progress")|list|length }}
-                </h2>
-            </div>
-
-            <div class="stat-card">
-                <span>Completed</span>
-                <h2 id="completedTasks">
-                    {{ tasks|selectattr("status", "equalto", "completed")|list|length }}
-                </h2>
-            </div>
-
-        </section>
-
-
-        <!-- Tasks Section -->
-        <section class="tasks-section" id="tasks">
-
-            <div class="section-heading">
-
-                <div>
-
-                    <h2>
-                        Team Tasks
-                    </h2>
-
-                    <p>
-                        Track what your team is working on.
-                    </p>
-
-                </div>
-
-                <input
-                    type="text"
-                    id="searchTask"
-                    placeholder="Search tasks..."
-                    onkeyup="searchTasks()"
-                >
-
-            </div>
-
-
-            <!-- Task List -->
-            <div class="task-list" id="taskList">
-
-                {% if tasks %}
-
-                    {% for task in tasks %}
-
-                    <div class="task-card">
-
-                        <div>
-
-                            <h3>
-                                {{ task["name"] }}
-                            </h3>
-
-                            <p>
-                                {{ task["description"] or "No description provided." }}
-                            </p>
-
-                        </div>
-
-
-                        <span class="status {{ task['status'] }}">
-
-                            {% if task["status"] == "todo" %}
-
-                                To Do
-
-                            {% elif task["status"] == "progress" %}
-
-                                In Progress
-
-                            {% elif task["status"] == "completed" %}
-
-                                Completed
-
-                            {% endif %}
-
-                        </span>
-
-                    </div>
-
-                    {% endfor %}
-
-                {% else %}
-
-                    <div class="task-card">
-
-                        <div>
-
-                            <h3>
-                                No tasks yet
-                            </h3>
-
-                            <p>
-                                Click "Add Task" to create your first task.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                {% endif %}
-
-            </div>
-
-        </section>
-
-
-        <!-- Team Section -->
-        <section class="tasks-section" id="team" style="margin-top: 30px;">
-
-            <div class="section-heading">
-
-                <div>
-
-                    <h2>
-                        Team Members
-                    </h2>
-
-                    <p>
-                        People working on this project.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="task-list">
-
-                <div class="task-card">
-
-                    <div>
-                        <h3>Project Manager</h3>
-                        <p>Plans tasks and coordinates the team.</p>
-                    </div>
-
-                    <span class="status progress">
-                        Active
-                    </span>
-
-                </div>
-
-
-                <div class="task-card">
-
-                    <div>
-                        <h3>Frontend Developer</h3>
-                        <p>Works on HTML, CSS and JavaScript.</p>
-                    </div>
-
-                    <span class="status progress">
-                        Active
-                    </span>
-
-                </div>
-
-
-                <div class="task-card">
-
-                    <div>
-                        <h3>Backend Developer</h3>
-                        <p>Works on Flask and database integration.</p>
-                    </div>
-
-                    <span class="status completed">
-                        Active
-                    </span>
-
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- Add Task Modal -->
-    <div class="modal" id="taskModal">
-
-        <div class="modal-box">
-
-            <span
-                class="close"
-                onclick="closeTaskForm()">
-                &times;
-            </span>
-
-
-            <h2>
-                Add New Task
-            </h2>
-
 
             <input
                 type="text"
-                id="taskName"
-                placeholder="Task name"
+                id="searchTask"
+                placeholder="Search tasks..."
+                onkeyup="searchTasks()"
             >
-
-
-            <input
-                type="text"
-                id="taskDescription"
-                placeholder="Task description"
-            >
-
-
-            <select id="taskStatus">
-
-                <option value="todo">
-                    To Do
-                </option>
-
-                <option value="progress">
-                    In Progress
-                </option>
-
-                <option value="completed">
-                    Completed
-                </option>
-
-            </select>
-
-
-            <button onclick="addTask()">
-                Add Task
-            </button>
 
         </div>
+
+
+        <div class="task-list" id="taskList">
+
+            {% if tasks %}
+
+                {% for task in tasks %}
+
+                <div class="task-card"
+                     data-task-id="{{ task['id'] }}">
+
+                    <div class="task-info">
+
+                        <h3>
+                            {{ task["name"] }}
+                        </h3>
+
+                        <p>
+                            {{ task["description"] or "No description provided." }}
+                        </p>
+
+                    </div>
+
+
+                    <select
+                        class="status-select {{ task['status'] }}"
+                        onchange="changeStatus({{ task['id'] }}, this.value)"
+                    >
+
+                        <option value="todo"
+                            {% if task["status"] == "todo" %}selected{% endif %}>
+                            To Do
+                        </option>
+
+                        <option value="progress"
+                            {% if task["status"] == "progress" %}selected{% endif %}>
+                            In Progress
+                        </option>
+
+                        <option value="completed"
+                            {% if task["status"] == "completed" %}selected{% endif %}>
+                            Completed
+                        </option>
+
+                    </select>
+
+
+                    <div class="task-actions">
+
+                        <button
+                            class="edit-btn"
+                            onclick="openEditModal(
+                                {{ task['id'] }},
+                                {{ task['name']|tojson }},
+                                {{ (task['description'] or '')|tojson }},
+                                {{ task['status']|tojson }}
+                            )"
+                        >
+                            Edit
+                        </button>
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteTask({{ task['id'] }})"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <h3>No tasks yet</h3>
+
+                    <p>
+                        Click "Add Task" to create your first task.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- Team -->
+    <section class="tasks-section team-section" id="team">
+
+        <div class="section-heading">
+
+            <div>
+                <h2>Team Members</h2>
+
+                <p>
+                    People working on this project.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="team-grid">
+
+            <div class="member-card">
+                <div class="avatar">PM</div>
+
+                <div>
+                    <h3>Project Manager</h3>
+                    <p>Plans and coordinates the team.</p>
+                </div>
+            </div>
+
+
+            <div class="member-card">
+                <div class="avatar">FD</div>
+
+                <div>
+                    <h3>Frontend Developer</h3>
+                    <p>Works on HTML, CSS and JavaScript.</p>
+                </div>
+            </div>
+
+
+            <div class="member-card">
+                <div class="avatar">BD</div>
+
+                <div>
+                    <h3>Backend Developer</h3>
+                    <p>Works on Flask and database.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- Task Modal -->
+<div class="modal" id="taskModal">
+
+    <div class="modal-box">
+
+        <span class="close" onclick="closeModal()">
+            &times;
+        </span>
+
+        <h2 id="modalTitle">
+            Add New Task
+        </h2>
+
+
+        <input
+            type="hidden"
+            id="editTaskId"
+        >
+
+
+        <label>Task Name</label>
+
+        <input
+            type="text"
+            id="taskName"
+            placeholder="Enter task name"
+        >
+
+
+        <label>Description</label>
+
+        <textarea
+            id="taskDescription"
+            placeholder="Enter task description"
+            rows="4"
+        ></textarea>
+
+
+        <label>Status</label>
+
+        <select id="taskStatus">
+
+            <option value="todo">
+                To Do
+            </option>
+
+            <option value="progress">
+                In Progress
+            </option>
+
+            <option value="completed">
+                Completed
+            </option>
+
+        </select>
+
+
+        <button
+            id="saveButton"
+            onclick="saveTask()"
+        >
+            Add Task
+        </button>
 
     </div>
 
-
-    <!-- Footer -->
-    <footer>
-
-        <p>
-            © 2026 TeamTask — Collaborative Team Project
-        </p>
-
-    </footer>
+</div>
 
 
-    <!-- JavaScript -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<footer>
+
+    <p>
+        © 2026 TeamTask — Collaborative Full-Stack Project
+    </p>
+
+</footer>
+
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 
 </html>
-
