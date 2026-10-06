@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Task Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">TeamTask</div>
+
+        <nav>
+            <a href="#">Dashboard</a>
+            <a href="#">Team</a>
+            <a href="#">Tasks</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="welcome">
+            <div>
+                <p class="small-title">TEAM WORKSPACE</p>
+                <h1>Manage your team tasks easily.</h1>
+                <p>
+                    Create tasks, track progress and work together
+                    with your team in one place.
+                </p>
+            </div>
+
+            <button onclick="openTaskForm()">+ Add Task</button>
+        </section>
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <span>Total Tasks</span>
+                <h2 id="totalTasks">4</h2>
+            </div>
+
+            <div class="stat-card">
+                <span>To Do</span>
+                <h2 id="todoTasks">2</h2>
+            </div>
+
+            <div class="stat-card">
+                <span>In Progress</span>
+                <h2 id="progressTasks">1</h2>
+            </div>
+
+            <div class="stat-card">
+                <span>Completed</span>
+                <h2 id="completedTasks">1</h2>
+            </div>
+
+        </section>
+
+        <section class="tasks-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Team Tasks</h2>
+                    <p>Track what your team is working on.</p>
+                </div>
+
+                <input
+                    type="text"
+                    id="searchTask"
+                    placeholder="Search tasks..."
+                    onkeyup="searchTasks()"
+                >
+            </div>
+
+            <div class="task-list" id="taskList">
+
+                <div class="task-card">
+                    <div>
+                        <h3>Design homepage</h3>
+                        <p>Prepare the main website design.</p>
+                    </div>
+
+                    <span class="status todo">To Do</span>
+                </div>
+
+                <div class="task-card">
+                    <div>
+                        <h3>Create database</h3>
+                        <p>Set up the project database.</p>
+                    </div>
+
+                    <span class="status progress">In Progress</span>
+                </div>
+
+                <div class="task-card">
+                    <div>
+                        <h3>Build navigation</h3>
+                        <p>Create navigation for the website.</p>
+                    </div>
+
+                    <span class="status todo">To Do</span>
+                </div>
+
+                <div class="task-card">
+                    <div>
+                        <h3>Project planning</h3>
+                        <p>Complete the initial project plan.</p>
+                    </div>
+
+                    <span class="status completed">Completed</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <div class="modal" id="taskModal">
+
+        <div class="modal-box">
+
+            <span class="close" onclick="closeTaskForm()">&times;</span>
+
+            <h2>Add New Task</h2>
+
+            <input
+                type="text"
+                id="taskName"
+                placeholder="Task name"
+            >
+
+            <input
+                type="text"
+                id="taskDescription"
+                placeholder="Task description"
+            >
+
+            <select id="taskStatus">
+                <option value="todo">To Do</option>
+                <option value="progress">In Progress</option>
+                <option value="completed">Completed</option>
+            </select>
+
+            <button onclick="addTask()">Add Task</button>
+
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 TeamTask — Collaborative Team Project</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>
